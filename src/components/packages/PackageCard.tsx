@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Star, Calendar, Users, Heart, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 
 interface Package {
-  id: number;
+  id: string;
   title: string;
   destination: string;
   image: string;

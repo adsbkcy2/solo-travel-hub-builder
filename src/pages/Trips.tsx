@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Calendar } from 'lucide-react';
 import { useContentManager } from '@/hooks/useContentManager';
+import { Link } from 'react-router-dom';
 
 const Trips = () => {
   const { packages, loading, searchPackages } = useContentManager();
@@ -107,9 +108,18 @@ const Trips = () => {
         <div className="bg-gradient-hero rounded-3xl p-8 text-center text-white mt-12">
           <h3 className="text-2xl font-bold mb-4">لم تجد الرحلة المناسبة؟</h3>
           <p className="text-lg mb-6">اطلب استشارة مجانية وسنساعدك في تصميم رحلة خاصة بك</p>
-          <Button variant="secondary" size="lg" className="bg-white text-primary hover:bg-gray-100">
-            اطلب استشارة مجانية
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/consultation">
+              <Button variant="secondary" size="lg" className="bg-white text-primary hover:bg-gray-100">
+                اطلب استشارة مجانية
+              </Button>
+            </Link>
+            <Link to="/booking">
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+                احجز الآن
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
