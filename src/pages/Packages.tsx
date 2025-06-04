@@ -71,17 +71,17 @@ const Packages = () => {
 
             {/* فلتر النوع */}
             <Select 
-              value={filters.category || ''} 
+              value={filters.category || 'all'} 
               onValueChange={(value) => setFilters(prev => ({ 
                 ...prev, 
-                category: value || undefined 
+                category: value === 'all' ? undefined : value 
               }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="نوع الرحلة" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">جميع الأنواع</SelectItem>
+                <SelectItem value="all">جميع الأنواع</SelectItem>
                 <SelectItem value="مدن">مدن</SelectItem>
                 <SelectItem value="شواطئ">شواطئ</SelectItem>
                 <SelectItem value="جبال">جبال</SelectItem>
@@ -95,17 +95,17 @@ const Packages = () => {
 
             {/* فلتر الصعوبة */}
             <Select 
-              value={filters.difficulty || ''} 
+              value={filters.difficulty || 'all'} 
               onValueChange={(value) => setFilters(prev => ({ 
                 ...prev, 
-                difficulty: value || undefined 
+                difficulty: value === 'all' ? undefined : value 
               }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="مستوى الصعوبة" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">جميع المستويات</SelectItem>
+                <SelectItem value="all">جميع المستويات</SelectItem>
                 <SelectItem value="سهل">سهل</SelectItem>
                 <SelectItem value="متوسط">متوسط</SelectItem>
                 <SelectItem value="صعب">صعب</SelectItem>
