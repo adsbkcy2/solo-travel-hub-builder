@@ -1,0 +1,116 @@
+
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: "Create {{collection}} "{{slug}}""
+    update: "Update {{collection}} "{{slug}}""
+    delete: "Delete {{collection}} "{{slug}}""
+    uploadMedia: "Upload "{{path}}""
+    deleteMedia: "Delete "{{path}}""
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "packages"
+    label: "الباقات السياحية"
+    folder: "content/packages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "العنوان", name: "title", widget: "string" }
+      - { label: "الوجهة", name: "destination", widget: "string" }
+      - { label: "الصورة الرئيسية", name: "image", widget: "image" }
+      - { label: "المعرض", name: "gallery", widget: "list", field: { label: "صورة", name: "image", widget: "image" } }
+      - { label: "المدة", name: "duration", widget: "string" }
+      - { label: "السعر", name: "price", widget: "number" }
+      - { label: "السعر الأصلي", name: "originalPrice", widget: "number", required: false }
+      - { label: "التقييم", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.1 }
+      - { label: "عدد التقييمات", name: "reviews", widget: "number" }
+      - { label: "حجم المجموعة", name: "groupSize", widget: "string" }
+      - { label: "مستوى الصعوبة", name: "difficulty", widget: "select", options: ["سهل", "متوسط", "صعب"] }
+      - { label: "التصنيف", name: "category", widget: "select", options: ["مدن", "شواطئ", "جبال", "ثقافية", "مغامرات", "عائلية", "رومانسية", "دينية"] }
+      - { label: "الوصف", name: "description", widget: "text" }
+      - { label: "أبرز المعالم", name: "highlights", widget: "list", field: { label: "معلم", name: "highlight", widget: "string" } }
+      - { label: "يشمل", name: "includes", widget: "list", field: { label: "عنصر", name: "item", widget: "string" } }
+      - { label: "لا يشمل", name: "excludes", widget: "list", field: { label: "عنصر", name: "item", widget: "string" } }
+      - { label: "شارة", name: "badge", widget: "string", required: false }
+      - { label: "نشط", name: "active", widget: "boolean", default: true }
+      - label: "برنامج الرحلة"
+        name: "itinerary"
+        widget: "list"
+        fields:
+          - { label: "اليوم", name: "day", widget: "string" }
+          - { label: "العنوان", name: "title", widget: "string" }
+          - { label: "الأنشطة", name: "activities", widget: "list", field: { label: "نشاط", name: "activity", widget: "string" } }
+
+  - name: "destinations"
+    label: "الوجهات السياحية"
+    folder: "content/destinations"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "الاسم", name: "name", widget: "string" }
+      - { label: "الدولة", name: "country", widget: "string" }
+      - { label: "الصورة", name: "image", widget: "image" }
+      - { label: "التقييم", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.1 }
+      - { label: "عدد الباقات", name: "packages", widget: "number" }
+      - { label: "السعر الابتدائي", name: "startingPrice", widget: "number" }
+      - { label: "الوصف", name: "description", widget: "text" }
+      - { label: "نشط", name: "active", widget: "boolean", default: true }
+
+  - name: "hotels"
+    label: "الفنادق"
+    folder: "content/hotels"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "الاسم", name: "name", widget: "string" }
+      - { label: "الموقع", name: "location", widget: "string" }
+      - { label: "الصورة الرئيسية", name: "image", widget: "image" }
+      - { label: "المعرض", name: "gallery", widget: "list", field: { label: "صورة", name: "image", widget: "image" } }
+      - { label: "عدد النجوم", name: "stars", widget: "number", min: 1, max: 5 }
+      - { label: "التقييم", name: "rating", widget: "number", value_type: "float", min: 1, max: 5, step: 0.1 }
+      - { label: "عدد التقييمات", name: "reviews", widget: "number" }
+      - { label: "سعر الليلة", name: "pricePerNight", widget: "number" }
+      - { label: "الوصف", name: "description", widget: "text" }
+      - { label: "المرافق", name: "amenities", widget: "list", field: { label: "مرفق", name: "amenity", widget: "string" } }
+      - { label: "نشط", name: "active", widget: "boolean", default: true }
+
+  - name: "testimonials"
+    label: "آراء العملاء"
+    folder: "content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "الاسم", name: "name", widget: "string" }
+      - { label: "الموقع", name: "location", widget: "string" }
+      - { label: "التقييم", name: "rating", widget: "number", min: 1, max: 5 }
+      - { label: "النص", name: "text", widget: "text" }
+      - { label: "الصورة", name: "image", widget: "image" }
+      - { label: "الرحلة", name: "trip", widget: "string" }
+      - { label: "نشط", name: "active", widget: "boolean", default: true }
+
+  - name: "settings"
+    label: "إعدادات الموقع"
+    files:
+      - name: "general"
+        label: "الإعدادات العامة"
+        file: "content/settings/general.yml"
+        fields:
+          - { label: "اسم الموقع", name: "siteName", widget: "string" }
+          - { label: "وصف الموقع", name: "siteDescription", widget: "text" }
+          - { label: "الشعار", name: "logo", widget: "image" }
+          - { label: "رقم الهاتف", name: "phone", widget: "string" }
+          - { label: "البريد الإلكتروني", name: "email", widget: "string" }
+          - { label: "العنوان", name: "address", widget: "string" }
+          - label: "وسائل التواصل الاجتماعي"
+            name: "socialMedia"
+            widget: "object"
+            fields:
+              - { label: "فيسبوك", name: "facebook", widget: "string", required: false }
+              - { label: "تويتر", name: "twitter", widget: "string", required: false }
+              - { label: "إنستاغرام", name: "instagram", widget: "string", required: false }
+              - { label: "يوتيوب", name: "youtube", widget: "string", required: false }
+              - { label: "لينكد إن", name: "linkedin", widget: "string", required: false }
