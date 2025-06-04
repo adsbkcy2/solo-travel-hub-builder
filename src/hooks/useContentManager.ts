@@ -58,6 +58,76 @@ export interface Hotel {
   active?: boolean;
 }
 
+// دالة لتحويل محتوى markdown إلى كائن
+const parseMarkdownFile = (content: string) => {
+  const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!frontMatterMatch) return null;
+
+  const frontMatter = frontMatterMatch[1];
+  const data: any = {};
+  
+  frontMatter.split('\n').forEach(line => {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+      
+      // إزالة الاقتباس إذا كان موجوداً
+      if (value.startsWith('"') && value.endsWith('"')) {
+        value = value.slice(1, -1);
+      }
+      
+      // تحويل القيم الرقمية
+      if (!isNaN(Number(value)) && value !== '') {
+        data[key] = Number(value);
+      } else if (value === 'true') {
+        data[key] = true;
+      } else if (value === 'false') {
+        data[key] = false;
+      } else {
+        data[key] = value;
+      }
+    }
+  });
+
+  return data;
+};
+
+// دالة لجلب قائمة الملفات من مجلد
+const fetchContentFiles = async (folder: string) => {
+  try {
+    const response = await fetch(`/content/${folder}/`);
+    if (!response.ok) {
+      console.log(`مجلد ${folder} غير موجود، استخدام البيانات التجريبية`);
+      return [];
+    }
+    
+    // محاولة قراءة قائمة الملفات
+    const text = await response.text();
+    const files = text.match(/href="([^"]*\.md)"/g)?.map(match => 
+      match.replace('href="', '').replace('"', '')
+    ) || [];
+    
+    return files;
+  } catch (error) {
+    console.log(`خطأ في جلب ملفات ${folder}:`, error);
+    return [];
+  }
+};
+
+// دالة لجلب محتوى ملف واحد
+const fetchFileContent = async (path: string) => {
+  try {
+    const response = await fetch(path);
+    if (response.ok) {
+      return await response.text();
+    }
+  } catch (error) {
+    console.log(`خطأ في جلب الملف ${path}:`, error);
+  }
+  return null;
+};
+
 // هوك لإدارة المحتوى من Netlify CMS
 export const useContentManager = () => {
   const [packages, setPackages] = useState<Package[]>([]);
@@ -69,128 +139,155 @@ export const useContentManager = () => {
   useEffect(() => {
     const loadContent = async () => {
       try {
-        // في التطبيق الحقيقي، هذه البيانات ستأتي من Netlify CMS
-        // هنا نضع بيانات تجريبية حتى يتم ربط CMS
+        console.log('بدء تحميل المحتوى من Netlify CMS...');
         
-        const mockPackages: Package[] = [
-          {
-            id: '1',
-            title: 'رحلة استكشافية إلى دبي',
-            destination: 'دبي، الإمارات',
-            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            duration: '5 أيام / 4 ليالي',
-            price: 2500,
-            originalPrice: 3200,
-            rating: 4.8,
-            reviews: 124,
-            groupSize: '2-8 أشخاص',
-            difficulty: 'سهل',
-            category: 'مدن',
-            description: 'استكشف جمال دبي الساحر في رحلة مليئة بالمغامرات والاكتشافات.',
-            highlights: ['برج خليفة', 'نافورة دبي', 'سوق الذهب', 'جزيرة النخلة'],
-            includes: ['طيران', 'إقامة', 'وجبات', 'جولات'],
-            badge: 'الأكثر مبيعاً',
-            active: true
-          },
-          {
-            id: '2',
-            title: 'جولة ثقافية في إسطنبول',
-            destination: 'إسطنبول، تركيا',
-            image: 'https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            duration: '7 أيام / 6 ليالي',
-            price: 1800,
-            originalPrice: 2300,
-            rating: 4.9,
-            reviews: 89,
-            difficulty: 'متوسط',
-            category: 'ثقافية',
-            description: 'اكتشف التاريخ العريق والثقافة الغنية في إسطنبول.',
-            highlights: ['آيا صوفيا', 'القصر الأزرق', 'البازار الكبير', 'مضيق البوسفور'],
-            includes: ['طيران', 'إقامة', 'جولات', 'مرشد'],
-            badge: 'جديد',
-            active: true
-          },
-          {
-            id: '3',
-            title: 'رحلة رومانسية إلى باريس',
-            destination: 'باريس، فرنسا',
-            image: 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            duration: '6 أيام / 5 ليالي',
-            price: 3200,
-            originalPrice: 4000,
-            rating: 4.9,
-            reviews: 156,
-            difficulty: 'سهل',
-            category: 'رومانسية',
-            description: 'استمتع بأجواء باريس الرومانسية ومعالمها الخلابة.',
-            highlights: ['برج إيفل', 'متحف اللوفر', 'قوس النصر', 'نهر السين'],
-            includes: ['طيران', 'إقامة فاخرة', 'جولات', 'عشاء رومانسي'],
-            active: true
+        // تحميل الباقات
+        const packageFiles = await fetchContentFiles('packages');
+        const packagesData: Package[] = [];
+        
+        for (const file of packageFiles) {
+          const content = await fetchFileContent(`/content/packages/${file}`);
+          if (content) {
+            const data = parseMarkdownFile(content);
+            if (data && data.active !== false) {
+              packagesData.push({
+                id: file.replace('.md', ''),
+                title: data.title || 'بدون عنوان',
+                destination: data.destination || 'غير محدد',
+                image: data.image || '/placeholder.svg',
+                gallery: data.gallery || [],
+                duration: data.duration || 'غير محدد',
+                price: data.price || 0,
+                originalPrice: data.originalPrice,
+                rating: data.rating || 0,
+                reviews: data.reviews || 0,
+                groupSize: data.groupSize,
+                difficulty: data.difficulty || 'سهل',
+                category: data.category || 'عام',
+                description: data.description || '',
+                highlights: data.highlights || [],
+                includes: data.includes || [],
+                excludes: data.excludes || [],
+                badge: data.badge,
+                active: data.active !== false,
+                itinerary: data.itinerary || []
+              });
+            }
           }
-        ];
+        }
 
-        const mockDestinations: Destination[] = [
-          {
-            id: '1',
-            name: 'دبي',
-            country: 'الإمارات العربية المتحدة',
-            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            rating: 4.8,
-            packages: 25,
-            startingPrice: 1500,
-            description: 'مدينة الأحلام والتسوق والفخامة',
-            active: true
-          },
-          {
-            id: '2',
-            name: 'إسطنبول',
-            country: 'تركيا',
-            image: 'https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            rating: 4.7,
-            packages: 32,
-            startingPrice: 1200,
-            description: 'حيث تلتقي أوروبا بآسيا في جمال خلاب',
-            active: true
+        // تحميل الوجهات
+        const destinationFiles = await fetchContentFiles('destinations');
+        const destinationsData: Destination[] = [];
+        
+        for (const file of destinationFiles) {
+          const content = await fetchFileContent(`/content/destinations/${file}`);
+          if (content) {
+            const data = parseMarkdownFile(content);
+            if (data && data.active !== false) {
+              destinationsData.push({
+                id: file.replace('.md', ''),
+                name: data.name || 'بدون اسم',
+                country: data.country || 'غير محدد',
+                image: data.image || '/placeholder.svg',
+                rating: data.rating || 0,
+                packages: data.packages || 0,
+                startingPrice: data.startingPrice || 0,
+                description: data.description || '',
+                active: data.active !== false
+              });
+            }
           }
-        ];
+        }
 
-        const mockHotels: Hotel[] = [
-          {
-            id: '1',
-            name: 'فندق برج العرب',
-            location: 'دبي، الإمارات',
-            image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            stars: 5,
-            rating: 4.9,
-            reviews: 324,
-            pricePerNight: 1200,
-            description: 'فندق فاخر بإطلالة خلابة على البحر',
-            amenities: ['واي فاي مجاني', 'مسبح', 'مطعم', 'صالة رياضية', 'سبا'],
-            active: true
-          },
-          {
-            id: '2',
-            name: 'فندق السلطان أحمد',
-            location: 'إسطنبول، تركيا',
-            image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            stars: 4,
-            rating: 4.6,
-            reviews: 189,
-            pricePerNight: 300,
-            description: 'فندق تاريخي في قلب المدينة القديمة',
-            amenities: ['واي فاي مجاني', 'إفطار', 'مطعم', 'موقف سيارات'],
-            active: true
+        // تحميل الفنادق
+        const hotelFiles = await fetchContentFiles('hotels');
+        const hotelsData: Hotel[] = [];
+        
+        for (const file of hotelFiles) {
+          const content = await fetchFileContent(`/content/hotels/${file}`);
+          if (content) {
+            const data = parseMarkdownFile(content);
+            if (data && data.active !== false) {
+              hotelsData.push({
+                id: file.replace('.md', ''),
+                name: data.name || 'بدون اسم',
+                location: data.location || 'غير محدد',
+                image: data.image || '/placeholder.svg',
+                gallery: data.gallery || [],
+                stars: data.stars || 1,
+                rating: data.rating || 0,
+                reviews: data.reviews || 0,
+                pricePerNight: data.pricePerNight || 0,
+                description: data.description || '',
+                amenities: data.amenities || [],
+                active: data.active !== false
+              });
+            }
           }
-        ];
+        }
 
-        setPackages(mockPackages);
-        setDestinations(mockDestinations);
-        setHotels(mockHotels);
-        setLoading(false);
+        console.log(`تم تحميل ${packagesData.length} باقة، ${destinationsData.length} وجهة، ${hotelsData.length} فندق`);
+        
+        setPackages(packagesData);
+        setDestinations(destinationsData);
+        setHotels(hotelsData);
+        
+        // في حالة عدم وجود محتوى، استخدام البيانات التجريبية
+        if (packagesData.length === 0 && destinationsData.length === 0 && hotelsData.length === 0) {
+          console.log('لم يتم العثور على محتوى، استخدام البيانات التجريبية');
+          loadFallbackData();
+        }
+        
       } catch (error) {
-        console.error('Error loading content:', error);
+        console.error('خطأ في تحميل المحتوى:', error);
+        loadFallbackData();
+      } finally {
         setLoading(false);
       }
+    };
+
+    // البيانات التجريبية كبديل
+    const loadFallbackData = () => {
+      const mockPackages: Package[] = [
+        {
+          id: '1',
+          title: 'رحلة استكشافية إلى دبي',
+          destination: 'دبي، الإمارات',
+          image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          duration: '5 أيام / 4 ليالي',
+          price: 2500,
+          originalPrice: 3200,
+          rating: 4.8,
+          reviews: 124,
+          groupSize: '2-8 أشخاص',
+          difficulty: 'سهل',
+          category: 'مدن',
+          description: 'استكشف جمال دبي الساحر في رحلة مليئة بالمغامرات والاكتشافات.',
+          highlights: ['برج خليفة', 'نافورة دبي', 'سوق الذهب', 'جزيرة النخلة'],
+          includes: ['طيران', 'إقامة', 'وجبات', 'جولات'],
+          badge: 'الأكثر مبيعاً',
+          active: true
+        }
+      ];
+
+      const mockDestinations: Destination[] = [
+        {
+          id: '1',
+          name: 'دبي',
+          country: 'الإمارات العربية المتحدة',
+          image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          rating: 4.8,
+          packages: 25,
+          startingPrice: 1500,
+          description: 'مدينة الأحلام والتسوق والفخامة',
+          active: true
+        }
+      ];
+
+      setPackages(mockPackages);
+      setDestinations(mockDestinations);
+      setHotels([]);
     };
 
     loadContent();
