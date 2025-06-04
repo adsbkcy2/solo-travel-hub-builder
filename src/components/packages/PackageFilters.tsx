@@ -42,6 +42,18 @@ export const PackageFilters: React.FC<PackageFiltersProps> = ({ onFilterChange }
 
   const ratings = [5, 4, 3, 2, 1];
 
+  // تطبيق الفلاتر
+  const applyFilters = () => {
+    const filters = {
+      priceRange,
+      categories: selectedCategories,
+      durations: selectedDurations,
+      difficulties: selectedDifficulties,
+      ratings: selectedRatings
+    };
+    onFilterChange(filters);
+  };
+
   const handleCategoryChange = (category: string, checked: boolean) => {
     if (checked) {
       setSelectedCategories([...selectedCategories, category]);
@@ -80,6 +92,7 @@ export const PackageFilters: React.FC<PackageFiltersProps> = ({ onFilterChange }
     setSelectedDurations([]);
     setSelectedDifficulties([]);
     setSelectedRatings([]);
+    onFilterChange({});
   };
 
   return (
@@ -188,7 +201,10 @@ export const PackageFilters: React.FC<PackageFiltersProps> = ({ onFilterChange }
         </div>
       </div>
 
-      <Button className="w-full bg-primary hover:bg-primary-600 text-white">
+      <Button 
+        className="w-full bg-primary hover:bg-primary-600 text-white"
+        onClick={applyFilters}
+      >
         تطبيق الفلاتر
       </Button>
     </div>

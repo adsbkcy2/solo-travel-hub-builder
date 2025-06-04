@@ -12,6 +12,7 @@ export const Header = () => {
     { name: 'الباقات السياحية', path: '/packages' },
     { name: 'الفنادق', path: '/hotels' },
     { name: 'الرحلات', path: '/trips' },
+    { name: 'الوجهات', path: '/destinations' },
     { name: 'من نحن', path: '/about' },
     { name: 'اتصل بنا', path: '/contact' },
   ];
@@ -67,11 +68,18 @@ export const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button className="bg-secondary hover:bg-secondary-600 text-white">
-              احجز الآن
-            </Button>
+            <Link to="/consultation">
+              <Button variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-white">
+                استشارة مجانية
+              </Button>
+            </Link>
+            <Link to="/booking">
+              <Button className="bg-secondary hover:bg-secondary-600 text-white">
+                احجز الآن
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -97,9 +105,18 @@ export const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Button className="bg-secondary hover:bg-secondary-600 text-white mt-4">
-                احجز الآن
-              </Button>
+              <div className="flex flex-col gap-3 mt-4">
+                <Link to="/consultation">
+                  <Button variant="outline" className="w-full border-secondary text-secondary hover:bg-secondary hover:text-white">
+                    استشارة مجانية
+                  </Button>
+                </Link>
+                <Link to="/booking">
+                  <Button className="w-full bg-secondary hover:bg-secondary-600 text-white">
+                    احجز الآن
+                  </Button>
+                </Link>
+              </div>
             </nav>
           </div>
         )}
