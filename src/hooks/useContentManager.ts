@@ -58,20 +58,20 @@ export interface Hotel {
   active?: boolean;
 }
 
-// هوك لإدارة المحتوى من Netlify CMS
+// هوك لإدارة المحتوى
 export const useContentManager = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // تحميل البيانات من ملفات المحتوى أو استخدام البيانات التجريبية
+  // تحميل البيانات المحسنة
   useEffect(() => {
     const loadContent = async () => {
       try {
         console.log('بدء تحميل المحتوى...');
         
-        // تحميل البيانات التجريبية المحسنة مباشرة
+        // البيانات المحسنة للباقات مع عدد باقات حقيقي للوجهات
         const mockPackages: Package[] = [
           {
             id: '1',
@@ -95,22 +95,29 @@ export const useContentManager = () => {
             includes: ['طيران ذهاب وإياب', 'إقامة 4 نجوم', 'وجبات يومية', 'جولات سياحية', 'نقل مطار'],
             excludes: ['تأشيرة الدخول', 'تأمين السفر', 'مصروفات شخصية'],
             badge: 'الأكثر مبيعاً',
-            active: true,
-            itinerary: [
-              {
-                day: 'اليوم الأول',
-                title: 'الوصول واستكشاف المدينة',
-                activities: ['الوصول للمطار', 'تسجيل الدخول للفندق', 'جولة في دبي مول']
-              },
-              {
-                day: 'اليوم الثاني', 
-                title: 'برج خليفة والأماكن التاريخية',
-                activities: ['زيارة برج خليفة', 'سوق الذهب', 'رحلة بحرية']
-              }
-            ]
+            active: true
           },
           {
             id: '2',
+            title: 'Dubai Luxury Experience',
+            destination: 'Dubai, UAE',
+            image: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            duration: '7 Days / 6 Nights',
+            price: 4500,
+            originalPrice: 5200,
+            rating: 4.9,
+            reviews: 89,
+            groupSize: '2-6 أشخاص',
+            difficulty: 'سهل',
+            category: 'فاخر',
+            description: 'تجربة فاخرة في دبي مع إقامة في أفضل الفنادق وأنشطة حصرية.',
+            highlights: ['فندق برج العرب', 'يخت خاص', 'مطاعم فاخرة', 'تسوق حصري'],
+            includes: ['طيران درجة أولى', 'إقامة 5 نجوم', 'وجبات فاخرة', 'سائق خاص'],
+            badge: 'فاخر',
+            active: true
+          },
+          {
+            id: '3',
             title: 'Istanbul Cultural Journey',
             destination: 'Istanbul, Turkey',
             image: 'https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -118,25 +125,43 @@ export const useContentManager = () => {
             price: 1800,
             originalPrice: 2300,
             rating: 4.7,
-            reviews: 89,
+            reviews: 156,
             groupSize: '2-12 شخص',
             difficulty: 'متوسط',
             category: 'ثقافية',
-            description: 'اكتشف تاريخ وثقافة إسطنبول العريقة، من آيا صوفيا إلى البازار الكبير، في رحلة ثقافية لا تُنسى.',
-            highlights: ['آيا صوفيا', 'البازار الكبير', 'قصر توب كابي', 'مضيق البوسفور', 'الحي التاريخي'],
+            description: 'اكتشف تاريخ وثقافة إسطنبول العريقة، من آيا صوفيا إلى البازار الكبير.',
+            highlights: ['آيا صوفيا', 'البازار الكبير', 'قصر توب كابي', 'مضيق البوسفور'],
             includes: ['طيران', 'إقامة', 'وجبات', 'جولات', 'دليل سياحي'],
             badge: 'جديد',
             active: true
           },
           {
-            id: '3',
+            id: '4',
+            title: 'Istanbul Historic Tour',
+            destination: 'Istanbul, Turkey',
+            image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            duration: '4 Days / 3 Nights',
+            price: 1200,
+            originalPrice: 1500,
+            rating: 4.6,
+            reviews: 73,
+            groupSize: '4-16 شخص',
+            difficulty: 'سهل',
+            category: 'تاريخية',
+            description: 'جولة تاريخية مركزة في أهم معالم إسطنبول التاريخية.',
+            highlights: ['الجامع الأزرق', 'قصر دولما بهجة', 'صهريج البازيليك'],
+            includes: ['طيران', 'إقامة 3 نجوم', 'إفطار', 'جولات'],
+            active: true
+          },
+          {
+            id: '5',
             title: 'Maldives Paradise Escape',
             destination: 'Maldives',
             image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             duration: '7 Days / 6 Nights',
-            price: 4500,
+            price: 6500,
             rating: 4.9,
-            reviews: 156,
+            reviews: 201,
             groupSize: '2-4 أشخاص',
             difficulty: 'سهل',
             category: 'شواطئ',
@@ -148,6 +173,13 @@ export const useContentManager = () => {
           }
         ];
 
+        // حساب عدد الباقات الحقيقي لكل وجهة
+        const packagesByDestination = mockPackages.reduce((acc, pkg) => {
+          const destKey = pkg.destination.split(',')[0].trim();
+          acc[destKey] = (acc[destKey] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+
         const mockDestinations: Destination[] = [
           {
             id: '1',
@@ -155,7 +187,7 @@ export const useContentManager = () => {
             country: 'الإمارات العربية المتحدة',
             image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             rating: 4.8,
-            packages: 25,
+            packages: packagesByDestination['Dubai'] || 0,
             startingPrice: 1500,
             description: 'مدينة الأحلام والتسوق والفخامة، حيث يلتقي التراث بالحداثة',
             active: true
@@ -166,7 +198,7 @@ export const useContentManager = () => {
             country: 'تركيا',
             image: 'https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             rating: 4.7,
-            packages: 18,
+            packages: packagesByDestination['Istanbul'] || 0,
             startingPrice: 1200,
             description: 'المدينة التي تربط بين قارتين، مليئة بالتاريخ والثقافة',
             active: true
@@ -177,8 +209,8 @@ export const useContentManager = () => {
             country: 'المالديف',
             image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             rating: 4.9,
-            packages: 12,
-            startingPrice: 3000,
+            packages: packagesByDestination['Maldives'] || 0,
+            startingPrice: 6500,
             description: 'جنة استوائية بمياه فيروزية وشواطئ رملية بيضاء',
             active: true
           }

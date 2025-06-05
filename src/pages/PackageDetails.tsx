@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -87,7 +87,6 @@ const PackageDetails = () => {
           'وقت حر للتسوق'
         ]
       },
-      // ... المزيد من الأيام
     ]
   };
 
@@ -96,7 +95,7 @@ const PackageDetails = () => {
       <Header />
 
       {/* Image Gallery */}
-      <div className="relative h-[60vh] overflow-hidden">
+      <div className="relative h-[40vh] md:h-[60vh] overflow-hidden">
         <img 
           src={packageData.images[0]}
           alt={packageData.title}
@@ -105,67 +104,67 @@ const PackageDetails = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         
         {/* Action Buttons */}
-        <div className="absolute top-6 left-6 flex gap-3">
-          <Button variant="outline" className="bg-white/80 backdrop-blur-sm">
-            <Heart size={16} className="ml-1" />
-            حفظ
+        <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-2 md:gap-3">
+          <Button variant="outline" className="bg-white/80 backdrop-blur-sm text-xs md:text-sm">
+            <Heart size={14} className="ml-1" />
+            <span className="hidden sm:inline">حفظ</span>
           </Button>
-          <Button variant="outline" className="bg-white/80 backdrop-blur-sm">
-            <Share2 size={16} className="ml-1" />
-            مشاركة
+          <Button variant="outline" className="bg-white/80 backdrop-blur-sm text-xs md:text-sm">
+            <Share2 size={14} className="ml-1" />
+            <span className="hidden sm:inline">مشاركة</span>
           </Button>
         </div>
 
         {/* Title Overlay */}
-        <div className="absolute bottom-8 right-8 text-white">
+        <div className="absolute bottom-4 md:bottom-8 right-4 md:right-8 text-white">
           <div className="flex items-center gap-2 mb-2">
-            <Badge className="bg-accent text-white">الأكثر مبيعاً</Badge>
-            <Badge className="bg-red-500 text-white">خصم 22%</Badge>
+            <Badge className="bg-accent text-white text-xs">الأكثر مبيعاً</Badge>
+            <Badge className="bg-red-500 text-white text-xs">خصم 22%</Badge>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 font-tajawal">
+          <h1 className="text-2xl md:text-4xl xl:text-5xl font-bold mb-2 font-tajawal">
             {packageData.title}
           </h1>
-          <p className="text-xl flex items-center gap-2">
-            <MapPin size={20} />
+          <p className="text-sm md:text-xl flex items-center gap-2">
+            <MapPin size={16} className="md:w-5 md:h-5" />
             {packageData.destination}
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Quick Info */}
-            <div className="bg-white rounded-2xl p-6 mb-8 travel-shadow">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-white rounded-2xl p-4 md:p-6 mb-6 md:mb-8 travel-shadow">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Calendar className="text-blue-600" size={24} />
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Calendar className="text-blue-600" size={20} />
                   </div>
-                  <div className="text-sm text-gray-600">المدة</div>
-                  <div className="font-bold">{packageData.duration}</div>
+                  <div className="text-xs md:text-sm text-gray-600">المدة</div>
+                  <div className="font-bold text-xs md:text-sm">{packageData.duration}</div>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Users className="text-green-600" size={24} />
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Users className="text-green-600" size={20} />
                   </div>
-                  <div className="text-sm text-gray-600">حجم المجموعة</div>
-                  <div className="font-bold">{packageData.groupSize}</div>
+                  <div className="text-xs md:text-sm text-gray-600">حجم المجموعة</div>
+                  <div className="font-bold text-xs md:text-sm">{packageData.groupSize}</div>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Star className="text-purple-600" size={24} />
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Star className="text-purple-600" size={20} />
                   </div>
-                  <div className="text-sm text-gray-600">التقييم</div>
-                  <div className="font-bold">{packageData.rating}/5</div>
+                  <div className="text-xs md:text-sm text-gray-600">التقييم</div>
+                  <div className="font-bold text-xs md:text-sm">{packageData.rating}/5</div>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Shield className="text-orange-600" size={24} />
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Shield className="text-orange-600" size={20} />
                   </div>
-                  <div className="text-sm text-gray-600">المستوى</div>
-                  <div className="font-bold">{packageData.difficulty}</div>
+                  <div className="text-xs md:text-sm text-gray-600">المستوى</div>
+                  <div className="font-bold text-xs md:text-sm">{packageData.difficulty}</div>
                 </div>
               </div>
             </div>
@@ -173,28 +172,28 @@ const PackageDetails = () => {
             {/* Tabs */}
             <Tabs defaultValue="overview" className="bg-white rounded-2xl travel-shadow">
               <TabsList className="grid w-full grid-cols-4 p-2 m-2">
-                <TabsTrigger value="overview">نظرة عامة</TabsTrigger>
-                <TabsTrigger value="itinerary">البرنامج</TabsTrigger>
-                <TabsTrigger value="includes">يشمل/لا يشمل</TabsTrigger>
-                <TabsTrigger value="reviews">التقييمات</TabsTrigger>
+                <TabsTrigger value="overview" className="text-xs md:text-sm">نظرة عامة</TabsTrigger>
+                <TabsTrigger value="itinerary" className="text-xs md:text-sm">البرنامج</TabsTrigger>
+                <TabsTrigger value="includes" className="text-xs md:text-sm">يشمل/لا يشمل</TabsTrigger>
+                <TabsTrigger value="reviews" className="text-xs md:text-sm">التقييمات</TabsTrigger>
               </TabsList>
               
-              <div className="p-6">
+              <div className="p-4 md:p-6">
                 <TabsContent value="overview" className="space-y-6">
                   <div>
-                    <h3 className="text-2xl font-bold mb-4 font-tajawal">وصف الرحلة</h3>
+                    <h3 className="text-xl md:text-2xl font-bold mb-4 font-tajawal">وصف الرحلة</h3>
                     <p className="text-gray-700 leading-relaxed mb-6">
                       {packageData.description}
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="text-xl font-bold mb-4 font-tajawal">أبرز المعالم</h4>
+                    <h4 className="text-lg md:text-xl font-bold mb-4 font-tajawal">أبرز المعالم</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {packageData.highlights.map((highlight, index) => (
                         <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                           <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
-                          <span className="text-gray-700">{highlight}</span>
+                          <span className="text-gray-700 text-sm md:text-base">{highlight}</span>
                         </div>
                       ))}
                     </div>
@@ -265,19 +264,19 @@ const PackageDetails = () => {
 
           {/* Booking Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl p-6 travel-shadow sticky top-8">
+            <div className="bg-white rounded-2xl p-4 md:p-6 travel-shadow sticky top-4 md:top-8">
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <span className="text-3xl font-bold text-primary">
+                  <span className="text-2xl md:text-3xl font-bold text-primary">
                     {packageData.price.toLocaleString()} ريال
                   </span>
                   {packageData.originalPrice && (
-                    <span className="text-lg text-gray-500 line-through">
+                    <span className="text-sm md:text-lg text-gray-500 line-through">
                       {packageData.originalPrice.toLocaleString()}
                     </span>
                   )}
                 </div>
-                <p className="text-gray-600">للشخص الواحد</p>
+                <p className="text-gray-600 text-sm md:text-base">للشخص الواحد</p>
               </div>
 
               {/* Booking Form */}
@@ -288,7 +287,7 @@ const PackageDetails = () => {
                   </label>
                   <input 
                     type="date"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm md:text-base"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
                   />
@@ -299,7 +298,7 @@ const PackageDetails = () => {
                     عدد المسافرين
                   </label>
                   <select 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm md:text-base"
                     value={travelers}
                     onChange={(e) => setTravelers(Number(e.target.value))}
                   >
@@ -312,11 +311,11 @@ const PackageDetails = () => {
 
               {/* Price Breakdown */}
               <div className="border-t pt-4 mb-6">
-                <div className="flex justify-between mb-2">
+                <div className="flex justify-between mb-2 text-sm md:text-base">
                   <span>السعر الأساسي ({travelers} مسافر)</span>
                   <span>{(packageData.price * travelers).toLocaleString()} ريال</span>
                 </div>
-                <div className="flex justify-between mb-2 text-green-600">
+                <div className="flex justify-between mb-2 text-green-600 text-sm md:text-base">
                   <span>الخصم</span>
                   <span>-{((packageData.originalPrice - packageData.price) * travelers).toLocaleString()} ريال</span>
                 </div>
@@ -326,27 +325,31 @@ const PackageDetails = () => {
                 </div>
               </div>
 
-              <Button className="w-full bg-primary hover:bg-primary-600 text-white py-4 text-lg font-bold mb-3">
-                احجز الآن
-              </Button>
+              <Link to="/booking">
+                <Button className="w-full bg-primary hover:bg-primary-600 text-white py-3 md:py-4 text-sm md:text-lg font-bold mb-3">
+                  احجز الآن
+                </Button>
+              </Link>
               
-              <Button variant="outline" className="w-full border-secondary text-secondary hover:bg-secondary hover:text-white">
-                اطلب استشارة مجانية
-              </Button>
+              <Link to="/consultation">
+                <Button variant="outline" className="w-full border-secondary text-secondary hover:bg-secondary hover:text-white text-sm md:text-base">
+                  اطلب استشارة مجانية
+                </Button>
+              </Link>
 
               {/* Trust Badges */}
               <div className="mt-6 pt-6 border-t">
-                <div className="grid grid-cols-3 gap-4 text-center text-sm">
+                <div className="grid grid-cols-3 gap-4 text-center text-xs md:text-sm">
                   <div>
-                    <Shield className="w-8 h-8 text-green-600 mx-auto mb-1" />
+                    <Shield className="w-6 h-6 md:w-8 md:h-8 text-green-600 mx-auto mb-1" />
                     <div className="text-gray-600">دفع آمن</div>
                   </div>
                   <div>
-                    <Clock className="w-8 h-8 text-blue-600 mx-auto mb-1" />
+                    <Clock className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mx-auto mb-1" />
                     <div className="text-gray-600">إلغاء مجاني</div>
                   </div>
                   <div>
-                    <Star className="w-8 h-8 text-yellow-600 mx-auto mb-1" />
+                    <Star className="w-6 h-6 md:w-8 md:h-8 text-yellow-600 mx-auto mb-1" />
                     <div className="text-gray-600">ضمان الجودة</div>
                   </div>
                 </div>

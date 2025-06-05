@@ -34,18 +34,18 @@ const Trips = () => {
       <Header />
       
       {/* Page Header */}
-      <div className="bg-gradient-hero py-20">
+      <div className="bg-gradient-hero py-12 md:py-20">
         <div className="container mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 font-tajawal">الرحلات المنظمة</h1>
-          <p className="text-xl max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-4xl xl:text-6xl font-bold mb-4 font-tajawal">الرحلات المنظمة</h1>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto">
             استكشف رحلاتنا المنظمة بعناية لأفضل التجارب السياحية مع مجموعات صغيرة ومرشدين متخصصين
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-8 md:py-12">
         {/* Search */}
-        <div className="bg-white rounded-2xl p-6 mb-8 travel-shadow">
+        <div className="bg-white rounded-2xl p-4 md:p-6 mb-6 md:mb-8 travel-shadow">
           <div className="max-w-md mx-auto relative">
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
             <Input
@@ -62,12 +62,12 @@ const Trips = () => {
         </div>
 
         {/* Upcoming Trips Section */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <div className="flex items-center gap-3 mb-6">
             <Calendar className="text-primary" size={24} />
-            <h2 className="text-3xl font-bold text-gray-800">الرحلات القادمة</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">الرحلات القادمة</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
             {upcomingTrips.slice(0, 6).map((trip) => (
               <div key={trip.id} className="relative">
                 <PackageCard package={trip} viewMode="grid" />
@@ -81,9 +81,9 @@ const Trips = () => {
 
         {/* Featured Trips Section */}
         {upcomingTrips.length > 6 && (
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">رحلات مميزة</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">رحلات مميزة</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {upcomingTrips.slice(6).map((trip) => (
                 <PackageCard key={trip.id} package={trip} viewMode="list" />
               ))}
@@ -105,17 +105,17 @@ const Trips = () => {
         )}
 
         {/* Call to Action */}
-        <div className="bg-gradient-hero rounded-3xl p-8 text-center text-white mt-12">
-          <h3 className="text-2xl font-bold mb-4">لم تجد الرحلة المناسبة؟</h3>
-          <p className="text-lg mb-6">اطلب استشارة مجانية وسنساعدك في تصميم رحلة خاصة بك</p>
+        <div className="bg-gradient-hero rounded-3xl p-6 md:p-8 text-center text-white mt-8 md:mt-12">
+          <h3 className="text-xl md:text-2xl font-bold mb-4">لم تجد الرحلة المناسبة؟</h3>
+          <p className="text-base md:text-lg mb-6">اطلب استشارة مجانية وسنساعدك في تصميم رحلة خاصة بك</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/consultation">
-              <Button variant="secondary" size="lg" className="bg-white text-primary hover:bg-gray-100">
+              <Button variant="secondary" size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100">
                 اطلب استشارة مجانية
               </Button>
             </Link>
             <Link to="/booking">
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary">
                 احجز الآن
               </Button>
             </Link>
