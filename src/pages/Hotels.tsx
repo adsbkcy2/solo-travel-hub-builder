@@ -78,17 +78,17 @@ const Hotels = () => {
 
             {/* فلتر النجوم */}
             <Select 
-              value={filters.stars?.toString() || ''} 
+              value={filters.stars?.toString() || 'all'} 
               onValueChange={(value) => setFilters(prev => ({ 
                 ...prev, 
-                stars: value ? parseInt(value) : undefined 
+                stars: value === 'all' ? undefined : parseInt(value) 
               }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="عدد النجوم" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">جميع التقييمات</SelectItem>
+                <SelectItem value="all">جميع التقييمات</SelectItem>
                 <SelectItem value="5">5 نجوم</SelectItem>
                 <SelectItem value="4">4 نجوم</SelectItem>
                 <SelectItem value="3">3 نجوم</SelectItem>
@@ -97,17 +97,17 @@ const Hotels = () => {
 
             {/* فلتر التقييم */}
             <Select 
-              value={filters.rating?.toString() || ''} 
+              value={filters.rating?.toString() || 'all'} 
               onValueChange={(value) => setFilters(prev => ({ 
                 ...prev, 
-                rating: value ? parseFloat(value) : undefined 
+                rating: value === 'all' ? undefined : parseFloat(value) 
               }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="التقييم" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">جميع التقييمات</SelectItem>
+                <SelectItem value="all">جميع التقييمات</SelectItem>
                 <SelectItem value="4.5">4.5+ نجوم</SelectItem>
                 <SelectItem value="4.0">4.0+ نجوم</SelectItem>
                 <SelectItem value="3.5">3.5+ نجوم</SelectItem>

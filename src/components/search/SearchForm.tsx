@@ -56,6 +56,7 @@ export const SearchForm = () => {
               <SelectValue placeholder="اختر وجهتك" />
             </SelectTrigger>
             <SelectContent className="bg-white">
+              <SelectItem value="all-destinations">جميع الوجهات</SelectItem>
               {destinations.map((dest) => (
                 <SelectItem key={dest.id} value={dest.name}>
                   {dest.name}

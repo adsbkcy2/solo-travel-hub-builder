@@ -1,212 +1,122 @@
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Filter, RotateCcw } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 interface PackageFiltersProps {
-  onFilterChange: (filters: any) => void;
+  filters: {
+    category: string | undefined;
+    priceRange: [number, number];
+    duration: string | undefined;
+    difficulty: string | undefined;
+    rating: number | undefined;
+  };
+  onFiltersChange: (filters: any) => void;
+  packages: any[];
 }
 
-export const PackageFilters: React.FC<PackageFiltersProps> = ({ onFilterChange }) => {
-  const [priceRange, setPriceRange] = useState([500, 5000]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
-  const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
-  const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-
-  const categories = [
-    'مدن',
-    'شواطئ',
-    'جبال',
-    'ثقافية',
-    'مغامرات',
-    'عائلية',
-    'رومانسية',
-    'دينية'
-  ];
-
-  const durations = [
-    '1-3 أيام',
-    '4-7 أيام',
-    '8-14 يوم',
-    'أكثر من 14 يوم'
-  ];
-
-  const difficulties = [
-    'سهل',
-    'متوسط',
-    'صعب'
-  ];
-
-  const ratings = [5, 4, 3, 2, 1];
-
-  // تطبيق الفلاتر
-  const applyFilters = () => {
-    const filters = {
-      priceRange,
-      categories: selectedCategories,
-      durations: selectedDurations,
-      difficulties: selectedDifficulties,
-      ratings: selectedRatings
-    };
-    onFilterChange(filters);
-  };
-
-  const handleCategoryChange = (category: string, checked: boolean) => {
-    if (checked) {
-      setSelectedCategories([...selectedCategories, category]);
-    } else {
-      setSelectedCategories(selectedCategories.filter(c => c !== category));
-    }
-  };
-
-  const handleDurationChange = (duration: string, checked: boolean) => {
-    if (checked) {
-      setSelectedDurations([...selectedDurations, duration]);
-    } else {
-      setSelectedDurations(selectedDurations.filter(d => d !== duration));
-    }
-  };
-
-  const handleDifficultyChange = (difficulty: string, checked: boolean) => {
-    if (checked) {
-      setSelectedDifficulties([...selectedDifficulties, difficulty]);
-    } else {
-      setSelectedDifficulties(selectedDifficulties.filter(d => d !== difficulty));
-    }
-  };
-
-  const handleRatingChange = (rating: number, checked: boolean) => {
-    if (checked) {
-      setSelectedRatings([...selectedRatings, rating]);
-    } else {
-      setSelectedRatings(selectedRatings.filter(r => r !== rating));
-    }
-  };
-
-  const resetFilters = () => {
-    setPriceRange([500, 5000]);
-    setSelectedCategories([]);
-    setSelectedDurations([]);
-    setSelectedDifficulties([]);
-    setSelectedRatings([]);
-    onFilterChange({});
+export const PackageFilters = ({ filters, onFiltersChange, packages }: PackageFiltersProps) => {
+  const updateFilter = (key: string, value: any) => {
+    onFiltersChange({
+      ...filters,
+      [key]: value
+    });
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 travel-shadow sticky top-8">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-          <Filter size={20} />
-          فلترة النتائج
-        </h3>
-        <Button variant="outline" size="sm" onClick={resetFilters}>
-          <RotateCcw size={16} className="ml-1" />
-          إعادة تعيين
-        </Button>
+    <div className="bg-white rounded-2xl p-6 mb-8 travel-shadow">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        {/* Category Filter */}
+        <Select 
+          value={filters.category || 'all'} 
+          onValueChange={(value) => updateFilter('category', value === 'all' ? undefined : value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="فئة الرحلة" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">جميع الفئات</SelectItem>
+            <SelectItem value="مدن">مدن</SelectItem>
+            <SelectItem value="شواطئ">شواطئ</SelectItem>
+            <SelectItem value="جبال">جبال</SelectItem>
+            <SelectItem value="ثقافية">ثقافية</SelectItem>
+            <SelectItem value="مغامرات">مغامرات</SelectItem>
+            <SelectItem value="عائلية">عائلية</SelectItem>
+            <SelectItem value="رومانسية">رومانسية</SelectItem>
+            <SelectItem value="دينية">دينية</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Duration Filter */}
+        <Select 
+          value={filters.duration || 'all'} 
+          onValueChange={(value) => updateFilter('duration', value === 'all' ? undefined : value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="مدة الرحلة" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">جميع المدد</SelectItem>
+            <SelectItem value="1-3">1-3 أيام</SelectItem>
+            <SelectItem value="4-7">4-7 أيام</SelectItem>
+            <SelectItem value="8-14">8-14 يوم</SelectItem>
+            <SelectItem value="15+">أكثر من 15 يوم</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Difficulty Filter */}
+        <Select 
+          value={filters.difficulty || 'all'} 
+          onValueChange={(value) => updateFilter('difficulty', value === 'all' ? undefined : value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="مستوى الصعوبة" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">جميع المستويات</SelectItem>
+            <SelectItem value="Easy">سهل</SelectItem>
+            <SelectItem value="Moderate">متوسط</SelectItem>
+            <SelectItem value="Challenging">صعب</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Rating Filter */}
+        <Select 
+          value={filters.rating?.toString() || 'all'} 
+          onValueChange={(value) => updateFilter('rating', value === 'all' ? undefined : parseFloat(value))}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="التقييم" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">جميع التقييمات</SelectItem>
+            <SelectItem value="4.5">4.5+ نجوم</SelectItem>
+            <SelectItem value="4.0">4.0+ نجوم</SelectItem>
+            <SelectItem value="3.5">3.5+ نجوم</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* Price Range */}
-      <div className="mb-8">
-        <h4 className="font-semibold text-gray-800 mb-4">نطاق السعر</h4>
+      {/* Price Range Slider */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          نطاق السعر (ريال): {filters.priceRange[0]} - {filters.priceRange[1]}
+        </label>
         <Slider
-          value={priceRange}
-          onValueChange={setPriceRange}
+          value={filters.priceRange}
+          onValueChange={(value) => updateFilter('priceRange', value as [number, number])}
           min={0}
           max={10000}
           step={100}
           className="mb-3"
         />
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>{priceRange[0]} ريال</span>
-          <span>{priceRange[1]} ريال</span>
-        </div>
       </div>
 
-      {/* Categories */}
-      <div className="mb-8">
-        <h4 className="font-semibold text-gray-800 mb-4">نوع الرحلة</h4>
-        <div className="space-y-3">
-          {categories.map((category) => (
-            <div key={category} className="flex items-center space-x-2">
-              <Checkbox
-                id={category}
-                checked={selectedCategories.includes(category)}
-                onCheckedChange={(checked) => handleCategoryChange(category, !!checked)}
-              />
-              <label htmlFor={category} className="text-sm text-gray-700 cursor-pointer">
-                {category}
-              </label>
-            </div>
-          ))}
-        </div>
+      <div className="text-gray-600">
+        عرض {packages.length} باقة
       </div>
-
-      {/* Duration */}
-      <div className="mb-8">
-        <h4 className="font-semibold text-gray-800 mb-4">مدة الرحلة</h4>
-        <div className="space-y-3">
-          {durations.map((duration) => (
-            <div key={duration} className="flex items-center space-x-2">
-              <Checkbox
-                id={duration}
-                checked={selectedDurations.includes(duration)}
-                onCheckedChange={(checked) => handleDurationChange(duration, !!checked)}
-              />
-              <label htmlFor={duration} className="text-sm text-gray-700 cursor-pointer">
-                {duration}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Difficulty */}
-      <div className="mb-8">
-        <h4 className="font-semibold text-gray-800 mb-4">مستوى الصعوبة</h4>
-        <div className="space-y-3">
-          {difficulties.map((difficulty) => (
-            <div key={difficulty} className="flex items-center space-x-2">
-              <Checkbox
-                id={difficulty}
-                checked={selectedDifficulties.includes(difficulty)}
-                onCheckedChange={(checked) => handleDifficultyChange(difficulty, !!checked)}
-              />
-              <label htmlFor={difficulty} className="text-sm text-gray-700 cursor-pointer">
-                {difficulty}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Rating */}
-      <div className="mb-8">
-        <h4 className="font-semibold text-gray-800 mb-4">التقييم</h4>
-        <div className="space-y-3">
-          {ratings.map((rating) => (
-            <div key={rating} className="flex items-center space-x-2">
-              <Checkbox
-                id={`rating-${rating}`}
-                checked={selectedRatings.includes(rating)}
-                onCheckedChange={(checked) => handleRatingChange(rating, !!checked)}
-              />
-              <label htmlFor={`rating-${rating}`} className="text-sm text-gray-700 cursor-pointer flex items-center gap-1">
-                {rating} نجوم وأكثر
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <Button 
-        className="w-full bg-primary hover:bg-primary-600 text-white"
-        onClick={applyFilters}
-      >
-        تطبيق الفلاتر
-      </Button>
     </div>
   );
 };
