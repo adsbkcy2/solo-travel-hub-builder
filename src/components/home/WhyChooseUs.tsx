@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Shield, Award, Headphones, Globe, Clock, Heart } from 'lucide-react';
+import { AnimatedCounter } from '@/components/ui/animated-counter';
 
 export const WhyChooseUs = () => {
   const features = [
@@ -76,23 +77,31 @@ export const WhyChooseUs = () => {
           ))}
         </div>
 
-        {/* Stats Section */}
+        {/* Stats Section with Animated Counters */}
         <div className="mt-20 bg-gradient-hero rounded-3xl p-12 text-white text-center">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="animate-fade-in">
-              <div className="text-4xl md:text-5xl font-bold mb-2">10000+</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">
+                <AnimatedCounter end={10000} suffix="+" className="text-4xl md:text-5xl font-bold" />
+              </div>
               <div className="text-lg opacity-90">عميل سعيد</div>
             </div>
             <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              <div className="text-4xl md:text-5xl font-bold mb-2">500+</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">
+                <AnimatedCounter end={500} suffix="+" className="text-4xl md:text-5xl font-bold" />
+              </div>
               <div className="text-lg opacity-90">رحلة منظمة</div>
             </div>
             <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="text-4xl md:text-5xl font-bold mb-2">50+</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">
+                <AnimatedCounter end={50} suffix="+" className="text-4xl md:text-5xl font-bold" />
+              </div>
               <div className="text-lg opacity-90">وجهة سياحية</div>
             </div>
             <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="text-4xl md:text-5xl font-bold mb-2">15</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">
+                <AnimatedCounter end={15} className="text-4xl md:text-5xl font-bold" />
+              </div>
               <div className="text-lg opacity-90">سنة خبرة</div>
             </div>
           </div>

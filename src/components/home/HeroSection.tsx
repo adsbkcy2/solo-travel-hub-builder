@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { Search, MapPin, Calendar, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { SearchForm } from '@/components/search/SearchForm';
 
 export const HeroSection = () => {
   return (
@@ -31,58 +29,7 @@ export const HeroSection = () => {
           </p>
           
           {/* Search Form */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 max-w-4xl mx-auto mb-8 animate-slide-up">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">الوجهة</label>
-                <div className="relative">
-                  <MapPin className="absolute right-3 top-3 text-gray-400" size={20} />
-                  <Input 
-                    placeholder="اختر وجهتك" 
-                    className="pr-10 bg-white/90 border-0 text-gray-800"
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium">تاريخ المغادرة</label>
-                <div className="relative">
-                  <Calendar className="absolute right-3 top-3 text-gray-400" size={20} />
-                  <Input 
-                    type="date" 
-                    className="pr-10 bg-white/90 border-0 text-gray-800"
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium">تاريخ العودة</label>
-                <div className="relative">
-                  <Calendar className="absolute right-3 top-3 text-gray-400" size={20} />
-                  <Input 
-                    type="date" 
-                    className="pr-10 bg-white/90 border-0 text-gray-800"
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-medium">عدد المسافرين</label>
-                <div className="relative">
-                  <Users className="absolute right-3 top-3 text-gray-400" size={20} />
-                  <Input 
-                    placeholder="2 مسافرين" 
-                    className="pr-10 bg-white/90 border-0 text-gray-800"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <Button className="w-full mt-6 bg-accent hover:bg-accent-600 text-white py-6 text-lg font-bold rounded-xl">
-              <Search className="ml-2" size={20} />
-              ابحث عن رحلتك المثالية
-            </Button>
-          </div>
+          <SearchForm />
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-slide-up" style={{ animationDelay: '0.3s' }}>
