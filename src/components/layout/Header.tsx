@@ -1,82 +1,97 @@
 
 import React, { useState } from 'react';
-import { Menu, X, MapPin, Phone, Mail } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Menu, X, Phone, Mail } from 'lucide-react';
+import { useContentManager } from '@/hooks/useContentManager';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const { settings } = useContentManager();
 
-  const menuItems = [
+  const navLinks = [
     { name: 'الرئيسية', path: '/' },
     { name: 'الباقات السياحية', path: '/packages' },
-    { name: 'الفنادق', path: '/hotels' },
-    { name: 'الرحلات', path: '/trips' },
     { name: 'الوجهات', path: '/destinations' },
+    { name: 'الفنادق', path: '/hotels' },
+    { name: 'الرحلات المنظمة', path: '/trips' },
     { name: 'من نحن', path: '/about' },
-    { name: 'اتصل بنا', path: '/contact' },
+    { name: 'تواصل معنا', path: '/contact' }
   ];
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
-      {/* Top Bar - Hidden on small screens */}
-      <div className="bg-primary text-white py-1 md:py-2 hidden md:block">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center text-xs md:text-sm">
-            <div className="flex items-center gap-4 md:gap-6">
-              <div className="flex items-center gap-2">
-                <Phone size={12} className="md:w-4 md:h-4" />
-                <span>+966 50 123 4567</span>
+      {/* Top Bar */}
+      <div className="bg-primary text-white py-2 px-4">
+        <div className="container mx-auto flex justify-between items-center text-sm">
+          <div className="flex items-center gap-4">
+            {settings?.phone && (
+              <div className="flex items-center gap-1">
+                <Phone size={14} />
+                <span>{settings.phone}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail size={12} className="md:w-4 md:h-4" />
-                <span>info@travelsolo.com</span>
+            )}
+            {settings?.email && (
+              <div className="flex items-center gap-1">
+                <Mail size={14} />
+                <span>{settings.email}</span>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin size={12} className="md:w-4 md:h-4" />
-              <span>الرياض، المملكة العربية السعودية</span>
-            </div>
+            )}
+          </div>
+          <div className="hidden md:flex items-center gap-4">
+            <span>مرحباً بكم في {settings?.siteName || 'رحلات سولو'}</span>
           </div>
         </div>
       </div>
 
       {/* Main Header */}
-      <div className="container mx-auto px-4 py-3 md:py-4">
-        <div className="flex justify-between items-center">
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 md:gap-3">
-            <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-hero rounded-full flex items-center justify-center">
-              <MapPin className="text-white" size={16} />
-            </div>
+          <Link to="/" className="flex items-center">
+            <img 
+              src={settings?.logo || '/uploads/logo.jpg'} 
+              alt={settings?.siteName || 'رحلات سولو'}
+              className="h-12 w-12 object-contain ml-3"
+              onError={(e) => {
+                e.currentTarget.src = '/placeholder.svg';
+              }}
+            />
             <div>
-              <h1 className="text-lg md:text-2xl font-bold text-primary font-tajawal">رحلات سولو</h1>
-              <p className="text-xs md:text-sm text-gray-600 hidden md:block">وجهتك المثالية للسفر</p>
+              <h1 className="text-xl font-bold text-primary">
+                {settings?.siteName || 'رحلات سولو'}
+              </h1>
+              <p className="text-xs text-gray-600 hidden sm:block">
+                {settings?.siteDescription || 'وكالة سفر متخصصة'}
+              </p>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-            {menuItems.map((item) => (
+          <nav className="hidden lg:flex items-center space-x-reverse space-x-6">
+            {navLinks.map((link) => (
               <Link
-                key={item.name}
-                to={item.path}
-                className="text-gray-700 hover:text-primary transition-colors font-medium text-sm xl:text-base"
+                key={link.path}
+                to={link.path}
+                className={`text-gray-700 hover:text-primary transition-colors font-medium ${
+                  location.pathname === link.path ? 'text-primary border-b-2 border-primary' : ''
+                }`}
               >
-                {item.name}
+                {link.name}
               </Link>
             ))}
           </nav>
 
-          {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+          {/* Action Buttons */}
+          <div className="hidden lg:flex items-center gap-3">
             <Link to="/consultation">
-              <Button variant="outline" className="border-secondary text-secondary hover:bg-secondary hover:text-white text-sm xl:text-base px-3 xl:px-4">
+              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white">
                 استشارة مجانية
               </Button>
             </Link>
             <Link to="/booking">
-              <Button className="bg-secondary hover:bg-secondary-600 text-white text-sm xl:text-base px-3 xl:px-4">
+              <Button size="sm" className="bg-primary hover:bg-primary-600">
                 احجز الآن
               </Button>
             </Link>
@@ -86,33 +101,36 @@ export const Header = () => {
           <button
             className="lg:hidden p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden mt-4 py-4 border-t">
-            <nav className="flex flex-col gap-3">
-              {menuItems.map((item) => (
+          <div className="lg:hidden mt-4 pb-4 border-t border-gray-200">
+            <nav className="flex flex-col space-y-3 pt-4">
+              {navLinks.map((link) => (
                 <Link
-                  key={item.name}
-                  to={item.path}
-                  className="text-gray-700 hover:text-primary transition-colors font-medium py-2 text-base"
+                  key={link.path}
+                  to={link.path}
+                  className={`text-gray-700 hover:text-primary transition-colors font-medium py-2 ${
+                    location.pathname === link.path ? 'text-primary font-bold' : ''
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {item.name}
+                  {link.name}
                 </Link>
               ))}
-              <div className="flex flex-col gap-3 mt-4">
+              <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
                 <Link to="/consultation" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full border-secondary text-secondary hover:bg-secondary hover:text-white">
+                  <Button variant="outline" size="sm" className="w-full border-primary text-primary hover:bg-primary hover:text-white">
                     استشارة مجانية
                   </Button>
                 </Link>
                 <Link to="/booking" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full bg-secondary hover:bg-secondary-600 text-white">
+                  <Button size="sm" className="w-full bg-primary hover:bg-primary-600">
                     احجز الآن
                   </Button>
                 </Link>
